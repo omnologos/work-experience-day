@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alexa Products — New & Classic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Explore new and classic Alexa products with an interactive scroll-driven gallery." />
+    <style>
+      :root{font-family:'Poppins',Arial,Helvetica,sans-serif;--bg1:#0f1724;--bg2:#13263b;--accent:#ff9900;--muted:rgba(255,255,255,0.9)}
+      body{margin:0;min-height:100vh;color:#fff;background:linear-gradient(120deg,var(--bg1),var(--bg2));-webkit-font-smoothing:antialiased}
+      header{padding:18px;display:flex;justify-content:space-between;align-items:center}
+      a{color:var(--muted);text-decoration:none}
+      main{max-width:1100px;margin:0 auto;padding:28px}
+      h1{margin:0 0 8px 0}
+      #scroller-wrap{height:56vh;position:relative;overflow:hidden}
+      #scroller{position:sticky;top:96px;display:flex;align-items:center;height:100%}
+      #track{display:flex;gap:24px;padding:28px;will-change:transform}
+      .product-card{min-width:320px;max-width:360px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06));border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center}
+      .product-card img{width:160px;border-radius:10px}
+      .overlay{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+      button{background:var(--accent);border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+      @media(max-width:640px){#scroller-wrap{height:44vh} .product-card{min-width:260px}}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div><a href="index.html">← Home</a></div>
+      <nav><a href="alexa-details.html">Details</a> &nbsp; <a href="index.html">Summary</a></nav>
+    </header>
+    <main>
+      <h1>New & classic Alexa products</h1>
+      <p style="color:var(--muted)">Scroll down to pin the gallery and slide through products. Prices compare new vs old models.</p>
+
+      <section id="scroller-wrap">
+        <div id="scroller">
+          <div id="track"></div>
+        </div>
+      </section>
+
+      <div class="overlay">
+        <div id="product-info"><div id="product-name" style="font-weight:700"></div><div id="product-price" style="margin-top:6px"></div></div>
+        <div><button id="buy-now">Buy</button></div>
+      </div>
+    </main>
+
+    <script>
+      (function(){
+        const products = [
+          { id: 'echo_new', name: 'Echo (2025)', price: '$129', oldPrice: '$159', img: 'images/echo_new.jpg' },
+          { id: 'echo_dot', name: 'Echo Dot', price: '$49', oldPrice: '$59', img: 'images/echo_dot.jpg' },
+          { id: 'echo_old', name: 'Echo (2018)', price: '$79', oldPrice: '$99', img: 'images/echo_old.jpg' }
+        ];
+        const track = document.getElementById('track');
+        const scrollerWrap = document.getElementById('scroller-wrap');
+        const productName = document.getElementById('product-name');
+        const productPrice = document.getElementById('product-price');
+
+        products.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          const img = document.createElement('img'); img.src = p.img; img.alt = p.name;
+          const meta = document.createElement('div'); meta.innerHTML = `<div style="font-weight:700">${p.name}</div><div style="margin-top:6px;color:var(--muted)"><span style=\"font-weight:800;color:var(--accent)\">${p.price}</span> <span style=\"text-decoration:line-through;margin-left:8px;opacity:0.7\">${p.oldPrice}</span></div>`;
+          card.appendChild(img); card.appendChild(meta); track.appendChild(card);
+        });
+
+        function update(){
+          const trackWidth = track.scrollWidth;
+          const extra = Math.max(800, trackWidth * 0.9);
+          const section = document.getElementById('scroller-wrap');
+          const main = document.querySelector('main');
+          main.style.paddingBottom = (extra/2) + 'px';
+        }
+        update();
+
+        function onScroll(){
+          const section = document.getElementById('scroller-wrap');
+          const rect = document.getElementById('scroller-wrap').getBoundingClientRect();
+          let progress = 1 - (rect.bottom / (window.innerHeight + rect.height));
+          progress = Math.min(Math.max(progress, 0), 1);
+          const maxTranslate = Math.max(0, track.scrollWidth - (window.innerWidth * 0.6));
+          const x = -maxTranslate * progress;
+          track.style.transform = `translateX(${x}px)`;
+          const index = Math.round(progress * (products.length - 1));
+          const active = products[index];
+          productName.textContent = active.name;
+          productPrice.innerHTML = `<span style="color:var(--accent);font-weight:800">${active.price}</span> <span style="text-decoration:line-through;margin-left:10px;opacity:0.7">${active.oldPrice}</span>`;
+        }
+
+        window.addEventListener('scroll', onScroll, { passive:true });
+        window.addEventListener('resize', () => { update(); onScroll(); });
+        onScroll();
+      })();
+    </script>
+  </body>
+</html>

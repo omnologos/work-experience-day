@@ -181,6 +181,7 @@
 
       <div style="margin-top:1rem">
         <button id="facts-toggle" type="button" aria-expanded="false" aria-controls="facts-list">Show 5 quick facts</button>
+        <a href="products.html" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:700;margin-left:10px;">View products</a>
         <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;margin-left:10px;">Alexa Developer</a>
       </div>
 
@@ -291,9 +292,9 @@
       // --- Product scroller logic ---
       (function(){
         const products = [
-          { id: 'echo_new', name: 'Echo (2025)', price: '$129', oldPrice: '$159', img: 'images/echo_new.svg' },
-          { id: 'echo_dot', name: 'Echo Dot', price: '$49', oldPrice: '$59', img: 'images/echo_dot.svg' },
-          { id: 'echo_old', name: 'Echo (2018)', price: '$79', oldPrice: '$99', img: 'images/echo_old.svg' }
+          { id: 'echo_new', name: 'Echo (2025)', price: '$129', oldPrice: '$159', img: 'images/echo_new.jpg' },
+          { id: 'echo_dot', name: 'Echo Dot', price: '$49', oldPrice: '$59', img: 'images/echo_dot.jpg' },
+          { id: 'echo_old', name: 'Echo (2018)', price: '$79', oldPrice: '$99', img: 'images/echo_old.jpg' }
         ];
 
         const track = document.getElementById('track');
