@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>What is Alexa — How it works</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Learn what Alexa is, how it works, common uses, and privacy controls. A beginner-friendly overview." />
     <meta property="og:title" content="What is Alexa — How it works" />
     <meta property="og:description" content="Learn what Alexa is, how it works, common uses, and privacy controls." />
@@ -14,16 +15,19 @@
     </script>
     <style>
       :root {
-        font-family: Arial, Helvetica, sans-serif;
-        --accent:#ffcc4d;
-        --muted:rgba(255,255,255,0.9);
+        font-family: 'Poppins', Arial, Helvetica, sans-serif;
+        --bg1: #0f1724; /* deep navy */
+        --bg2: #13263b; /* darker blue */
+        --accent: #ff9900; /* warm orange, amazon-ish */
+        --accent-2: #7de3a8; /* Gen Z mint */
+        --muted: rgba(255,255,255,0.9);
       }
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        background: linear-gradient(120deg, #232f3e, #e14f00);
+        background: radial-gradient(1200px 600px at 10% 10%, rgba(34,45,62,0.35), transparent), linear-gradient(120deg,var(--bg1),var(--bg2));
         color: #fff;
         -webkit-font-smoothing:antialiased;
       }
@@ -38,21 +42,31 @@
         height: auto;
         filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
       }
+      .hero {
+        display:grid;
+        grid-template-columns: 1fr min(40%,320px);
+        gap: 1.6rem;
+        align-items:center;
+      }
+      .hero-visual{display:flex;align-items:center;justify-content:center}
+      .badge{display:inline-block;background:linear-gradient(90deg,var(--accent),#ffcc4d);color:#07202b;padding:6px 10px;border-radius:999px;font-weight:700}
       header{position:fixed;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:80}
       nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px}
       nav a[aria-current="page"]{background:rgba(255,255,255,0.08)}
       .card {
         text-align: left;
-        background: rgba(0, 0, 0, 0.35);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.14));
+        border: 1px solid rgba(255,255,255,0.06);
         border-radius: 16px;
         padding: 2rem;
-        width: min(92vw, 820px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        width: min(92vw, 920px);
+        box-shadow: 0 18px 40px rgba(2,6,23,0.6);
       }
       h1 {
         margin-top: 0;
-        font-size: clamp(1.6rem, 4vw, 2.6rem);
+        font-size: clamp(1.75rem, 4vw, 3rem);
+        line-height:1.05;
+        letter-spacing:-0.6px;
       }
       p {
         margin-bottom: 0.6rem;
@@ -70,11 +84,11 @@
         padding: 0.9rem 1rem;
         font-size: 1rem;
         font-weight: 700;
-        color: #232f3e;
+        color: #07202b;
         background: var(--accent);
         cursor: pointer;
       }
-      button:focus{outline:3px solid rgba(255,204,77,0.25);outline-offset:3px}
+      button:focus{outline:3px solid rgba(255,153,0,0.18);outline-offset:3px}
       button:hover {
         filter: brightness(1.05);
       }
@@ -95,6 +109,11 @@
         .card{padding:1.2rem}
         nav a{padding:8px}
       }
+
+        /* Gen Z micro styles */
+        .pill{display:inline-block;background:linear-gradient(90deg,var(--accent-2),#a0ffdf);color:#00221a;padding:8px 12px;border-radius:999px;font-weight:600;margin-right:8px;margin-top:8px}
+        .examples button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:8px 10px;border-radius:999px;margin:6px;cursor:pointer}
+        .neon{box-shadow:0 6px 18px rgba(125,227,168,0.18)}
     </style>
   </head>
     <body>
@@ -111,54 +130,80 @@
     </header>
 
     <main id="main-content" class="card" role="main">
-      <h1>What is Alexa?</h1>
-      <p>Alexa is a cloud-based voice assistant that responds to a wake word and performs tasks like answering questions, controlling smart devices, and playing media.</p>
+      <div class="hero">
+        <div>
+          <span class="badge">INSPIRATION</span>
+          <h1>Alexa — what it is and how it works</h1>
+          <p style="margin-top:8px;color:var(--muted)">A quick, friendly primer — with examples you can try right away.</p>
+
+          <div style="margin-top:1rem">
+            <button id="details-button" class="neon" aria-label="Learn more about Alexa">Learn more →</button>
+            <a href="alexa-details.html" style="margin-left:10px;text-decoration:none;padding:0.9rem 1rem;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:700">Read details</a>
+          </div>
+
+          <div style="margin-top:1rem">
+            <strong style="display:block;margin-bottom:8px">Try saying</strong>
+            <div class="examples">
+              <button title="Play vibe playlist">"Hey Alexa, play the vibe playlist 🎧"</button>
+              <button title="Set lights mood">"Alexa, set the lights to chill ✨"</button>
+              <button title="Quick timer">"Alexa, set a 10-minute timer ⏱️"</button>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem">
+            <span class="pill">Gen Z mode: vibes on</span>
+            <span class="pill">No-nonsense explainers</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <img src="images/Alexa-Echo-Transparent-Image.png" alt="Alexa device" style="max-width:100%;border-radius:18px;filter:drop-shadow(0 24px 40px rgba(0,0,0,0.6))" />
+        </div>
+      </div>
+
+      <hr style="margin:1.4rem 0;border:none;border-top:1px solid rgba(255,255,255,0.04)">
 
       <h2>How Alexa works</h2>
       <ol>
-        <li><strong>Wake word:</strong> A local model listens for the wake word and wakes the device.</li>
-        <li><strong>Record:</strong> The device captures a short audio clip of your request.</li>
-        <li><strong>Cloud processing:</strong> Audio is sent to the cloud where ASR (speech-to-text) and NLU determine intent.</li>
-        <li><strong>Response:</strong> The cloud returns a reply or commands a connected device.</li>
-        <li><strong>Execution:</strong> The device speaks the response or performs the action.</li>
+        <li><strong>Wake word:</strong> A small model listens locally for the wake word.</li>
+        <li><strong>Record & send:</strong> The device records your request and sends it securely to the cloud.</li>
+        <li><strong>Cloud processing:</strong> Speech-to-text and NLU map the request to an intent.</li>
+        <li><strong>Action:</strong> Alexa replies, plays media, or commands smart devices.</li>
       </ol>
 
       <h2>Common uses</h2>
       <ul>
-        <li>Hands-free information (weather, news, timers, answers)</li>
-        <li>Smart home control (lights, locks, thermostats)</li>
-        <li>Music, podcasts, and media playback</li>
-        <li>Alarms, reminders, and calendar management</li>
-        <li>Third-party Skills for shopping, games, and utilities</li>
+        <li>Get quick answers, timers, and reminders</li>
+        <li>Control smart home devices with voice</li>
+        <li>Play music, podcasts, or radio</li>
+        <li>Use Skills for games, shopping, and utilities</li>
       </ul>
 
-      <h2>Privacy & controls</h2>
-      <p>You can review and delete your voice recordings, mute the microphone on many devices, and control what Skills have access to. Alexa processes requests in the cloud to provide accurate responses; voice recordings and account data are subject to Amazon's privacy controls.</p>
-
-      <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem;">
+      <div style="margin-top:1rem">
         <button id="facts-toggle" type="button" aria-expanded="false" aria-controls="facts-list">Show 5 quick facts</button>
-        <button id="details-button" type="button" aria-label="Learn more about Alexa">Learn more →</button>
-        <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;">Alexa Developer</a>
+        <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;margin-left:10px;">Alexa Developer</a>
       </div>
 
       <ul id="facts-list" tabindex="0">
-        <li>Alexa Skills are voice apps that extend Alexa's abilities.</li>
-        <li>Wake word detection runs locally; other processing happens in the cloud.</li>
-        <li>Many manufacturers build Alexa into smart speakers, watches, and appliances.</li>
-        <li>Routines let you chain multiple actions to a single command.</li>
-        <li>You can use the Alexa app to customize settings and linked services.</li>
+        <li>Alexa Skills are voice apps that extend capabilities.</li>
+        <li>Wake-word detection runs locally; full processing happens in the cloud.</li>
+        <li>Routines let you chain commands to a single phrase.</li>
+        <li>Alexa integrates with many smart-home brands.</li>
+        <li>Use the Alexa app to review and delete voice history.</li>
       </ul>
+
       <p id="build-time"></p>
 
       <section id="privacy" aria-label="Privacy" style="margin-top:1rem">
         <h2>Privacy & controls</h2>
-        <p>You can review and delete voice recordings, mute the microphone, and control what Skills can access. Alexa processes requests in the cloud to provide accurate responses; your account settings determine data retention.</p>
+        <p style="color:var(--muted)">You can mute the mic, review and delete recordings, and control Skill permissions in your Alexa account.</p>
       </section>
     </main>
 
     <footer style="margin-top:18px;text-align:center;color:rgba(255,255,255,0.85);font-size:0.9rem">
-      <div>Image: <a href="images/" style="color:inherit;">Alexa device</a>. <span class="muted">Made for demo.</span></div>
+      <div>Image: Alexa device in <a href="images/" style="color:inherit;">/images</a>. Demo only. <span style="margin-left:8px">💬 <a href="#privacy" style="color:inherit;">Privacy</a></span></div>
     </footer>
+
     <script>
       // Build time stamp
       const now = new Date();
@@ -175,13 +220,15 @@
 
       // Interactive navigation to details page with a small fade
       const detailsBtn = document.getElementById('details-button');
-      detailsBtn.addEventListener('click', () => {
-        const card = document.querySelector('.card');
-        card.style.transition = 'opacity 220ms ease, transform 220ms ease';
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(8px)';
-        setTimeout(() => { window.location.href = 'alexa-details.html'; }, 240);
-      });
+      if(detailsBtn){
+        detailsBtn.addEventListener('click', () => {
+          const card = document.querySelector('.card');
+          card.style.transition = 'opacity 220ms ease, transform 220ms ease';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(8px)';
+          setTimeout(() => { window.location.href = 'alexa-details.html'; }, 240);
+        });
+      }
 
       // Simple analytics opt-in banner
       function showCookieBanner(){
