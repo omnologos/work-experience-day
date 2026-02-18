@@ -100,6 +100,32 @@
         window.addEventListener('scroll', onScroll, { passive:true });
         window.addEventListener('resize', () => { update(); onScroll(); });
         onScroll();
+
+        // Accessibility: contrast, text size and language (simple i18n)
+        const contrastToggle = document.getElementById('contrast-toggle');
+        const textInc = document.getElementById('text-inc');
+        const textDec = document.getElementById('text-dec');
+        const langSelect = document.getElementById('lang-select');
+
+        const savedContrast = localStorage.getItem('highContrast') === 'true';
+        const savedScale = parseFloat(localStorage.getItem('textScale') || '1');
+        const savedLang = localStorage.getItem('lang') || 'en';
+
+        function applyContrast(on){ document.body.classList.toggle('high-contrast', on); contrastToggle && contrastToggle.setAttribute('aria-pressed', on ? 'true' : 'false'); localStorage.setItem('highContrast', on ? 'true' : 'false'); }
+        function applyTextScale(scale){ const base=16; document.documentElement.style.fontSize=(base*scale)+'px'; localStorage.setItem('textScale', String(scale)); }
+
+        const i18n = {
+          en:{productsHeading:'New & classic Alexa products',productsSub:'Scroll down to pin the gallery and slide through products. Prices compare new vs old models.',buyBtn:'Buy'},
+          es:{productsHeading:'Productos Alexa — Nuevo y clásico',productsSub:'Desplázate para anclar la galería y ver los productos. Precios nuevos vs antiguos.',buyBtn:'Comprar'}
+        };
+        function applyLanguage(lang){ const dict=i18n[lang]||i18n.en; document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(dict[k]) el.textContent=dict[k];}); langSelect && (langSelect.value=lang); localStorage.setItem('lang', lang); }
+
+        contrastToggle && contrastToggle.addEventListener('click', ()=>applyContrast(!document.body.classList.contains('high-contrast')));
+        textInc && textInc.addEventListener('click', ()=>{ const s=Math.min(1.5, parseFloat(localStorage.getItem('textScale')||'1')+0.1); applyTextScale(s); });
+        textDec && textDec.addEventListener('click', ()=>{ const s=Math.max(0.8, parseFloat(localStorage.getItem('textScale')||'1')-0.1); applyTextScale(s); });
+        langSelect && langSelect.addEventListener('change', (e)=>applyLanguage(e.target.value));
+
+        applyContrast(savedContrast); applyTextScale(savedScale); applyLanguage(savedLang);
       })();
     </script>
   </body>

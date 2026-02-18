@@ -42,7 +42,15 @@
         <a href="index.html">Home</a>
         <a href="alexa-details.html" aria-current="page">Details</a>
       </nav>
-      <div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="contrast-toggle" aria-pressed="false" title="Toggle contrast" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">Contrast</button>
+        <button id="text-dec" title="Decrease text" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">A-</button>
+        <button id="text-inc" title="Increase text" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">A+</button>
+        <label for="lang-select" style="margin-left:6px;color:var(--muted)">Lang</label>
+        <select id="lang-select" aria-label="Select language" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:6px 8px;border-radius:8px">
+          <option value="en">EN</option>
+          <option value="es">ES</option>
+        </select>
         <a class="button" href="index.html">← Back to summary</a>
       </div>
     </header>
@@ -102,6 +110,34 @@
     </footer>
     <script>
       document.getElementById('build-time').textContent = 'Loaded at ' + new Date().toLocaleString();
+
+      // accessibility controls (contrast, text, language)
+      (function(){
+        const contrastToggle = document.getElementById('contrast-toggle');
+        const textInc = document.getElementById('text-inc');
+        const textDec = document.getElementById('text-dec');
+        const langSelect = document.getElementById('lang-select');
+
+        const savedContrast = localStorage.getItem('highContrast') === 'true';
+        const savedScale = parseFloat(localStorage.getItem('textScale') || '1');
+        const savedLang = localStorage.getItem('lang') || 'en';
+
+        function applyContrast(on){ document.body.classList.toggle('high-contrast', on); contrastToggle && contrastToggle.setAttribute('aria-pressed', on ? 'true' : 'false'); localStorage.setItem('highContrast', on ? 'true' : 'false'); }
+        function applyTextScale(scale){ const base=16; document.documentElement.style.fontSize=(base*scale)+'px'; localStorage.setItem('textScale', String(scale)); }
+
+        const i18n={
+          en:{privacyHeading:'Privacy',privacyBody:'Audio is transmitted only after wake-word detection. Check the Alexa app to review and delete voice history and manage microphone controls.'},
+          es:{privacyHeading:'Privacidad',privacyBody:'El audio se transmite solo después de la detección de la palabra de activación. Revisa y elimina el historial en la app de Alexa.'}
+        };
+        function applyLanguage(lang){ const dict=i18n[lang]||i18n.en; document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(dict[k]) el.textContent=dict[k];}); langSelect && (langSelect.value=lang); localStorage.setItem('lang', lang); }
+
+        contrastToggle && contrastToggle.addEventListener('click', ()=>applyContrast(!document.body.classList.contains('high-contrast')));
+        textInc && textInc.addEventListener('click', ()=>{ const s=Math.min(1.5, parseFloat(localStorage.getItem('textScale')||'1')+0.1); applyTextScale(s); });
+        textDec && textDec.addEventListener('click', ()=>{ const s=Math.max(0.8, parseFloat(localStorage.getItem('textScale')||'1')-0.1); applyTextScale(s); });
+        langSelect && langSelect.addEventListener('change', (e)=>applyLanguage(e.target.value));
+
+        applyContrast(savedContrast); applyTextScale(savedScale); applyLanguage(savedLang);
+      })();
     </script>
   </body>
 </html>
