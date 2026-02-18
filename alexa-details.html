@@ -33,6 +33,8 @@
       .examples button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 10px;border-radius:999px;margin:6px;cursor:pointer}
       .muted{opacity:0.9}
       pre{background:rgba(255,255,255,0.04);padding:0.75rem;border-radius:8px;overflow:auto}
+      .fade-up{opacity:0;transform:translateY(8px);transition:opacity 420ms ease, transform 420ms ease}
+      .fade-up.in{opacity:1;transform:translateY(0)}
     </style>
   </head>
   <body>
@@ -56,7 +58,7 @@
     </header>
 
     <main id="details-main" class="card" role="main">
-      <h1>Alexa — In depth</h1>
+      <h1 class="fade-up" id="details-title">Alexa — In depth</h1>
       <p class="muted">This page expands on how Alexa processes speech and performs actions.</p>
 
       <div style="margin-top:12px">
@@ -110,6 +112,8 @@
     </footer>
     <script>
       document.getElementById('build-time').textContent = 'Loaded at ' + new Date().toLocaleString();
+      // entrance animation for details title
+      window.requestAnimationFrame(()=>{ setTimeout(()=>{ const t=document.getElementById('details-title'); t && t.classList.add('in'); },120); });
 
       // accessibility controls (contrast, text, language)
       (function(){
