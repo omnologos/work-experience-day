@@ -114,6 +114,11 @@
         .pill{display:inline-block;background:linear-gradient(90deg,var(--accent-2),#a0ffdf);color:#00221a;padding:8px 12px;border-radius:999px;font-weight:600;margin-right:8px;margin-top:8px}
         .examples button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:8px 10px;border-radius:999px;margin:6px;cursor:pointer}
         .neon{box-shadow:0 6px 18px rgba(125,227,168,0.18)}
+        /* High contrast mode */
+        body.high-contrast{background:#000;color:#fff}
+        body.high-contrast .card{background:#000;border-color:#fff;color:#fff}
+        body.high-contrast a{color:#fff}
+        body.high-contrast button{border-color:#fff}
     </style>
   </head>
     <body>
@@ -125,8 +130,19 @@
       <nav aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
         <a href="alexa-details.html">Details</a>
+          <a href="products.html">Products</a>
         <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener">Developer</a>
       </nav>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="contrast-toggle" aria-pressed="false" title="Toggle high contrast" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">Contrast</button>
+          <button id="text-dec" title="Decrease text" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">A-</button>
+          <button id="text-inc" title="Increase text" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:6px 8px;border-radius:8px">A+</button>
+          <label for="lang-select" style="margin-left:6px;color:var(--muted)">Lang</label>
+          <select id="lang-select" aria-label="Select language" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:6px 8px;border-radius:8px">
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
+        </div>
     </header>
 
     <main id="main-content" class="card" role="main">
@@ -142,11 +158,11 @@
           </div>
 
           <div style="margin-top:1rem">
-            <strong style="display:block;margin-bottom:8px">Try saying</strong>
+                <strong style="display:block;margin-bottom:8px" data-i18n="trySaying">Try saying</strong>
             <div class="examples">
-              <button title="Play vibe playlist">"Hey Alexa, play the vibe playlist 🎧"</button>
-              <button title="Set lights mood">"Alexa, set the lights to chill ✨"</button>
-              <button title="Quick timer">"Alexa, set a 10-minute timer ⏱️"</button>
+                  <button title="Play vibe playlist" data-i18n="example1">"Hey Alexa, play the vibe playlist 🎧"</button>
+                  <button title="Set lights mood" data-i18n="example2">"Alexa, set the lights to chill ✨"</button>
+                  <button title="Quick timer" data-i18n="example3">"Alexa, set a 10-minute timer ⏱️"</button>
             </div>
           </div>
 
@@ -181,23 +197,23 @@
 
       <div style="margin-top:1rem">
         <button id="facts-toggle" type="button" aria-expanded="false" aria-controls="facts-list">Show 5 quick facts</button>
-        <a href="products.html" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:700;margin-left:10px;">View products</a>
+        <a href="products.html" id="products-link" data-i18n="viewProducts" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:700;margin-left:10px;">View products</a>
         <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;margin-left:10px;">Alexa Developer</a>
       </div>
 
       <ul id="facts-list" tabindex="0">
-        <li>Alexa Skills are voice apps that extend capabilities.</li>
-        <li>Wake-word detection runs locally; full processing happens in the cloud.</li>
-        <li>Routines let you chain commands to a single phrase.</li>
-        <li>Alexa integrates with many smart-home brands.</li>
-        <li>Use the Alexa app to review and delete voice history.</li>
+        <li data-i18n="fact1">Alexa Skills are voice apps that extend capabilities.</li>
+        <li data-i18n="fact2">Wake-word detection runs locally; full processing happens in the cloud.</li>
+        <li data-i18n="fact3">Routines let you chain commands to a single phrase.</li>
+        <li data-i18n="fact4">Alexa integrates with many smart-home brands.</li>
+        <li data-i18n="fact5">Use the Alexa app to review and delete voice history.</li>
       </ul>
 
       <p id="build-time"></p>
 
       <section id="privacy" aria-label="Privacy" style="margin-top:1rem">
-        <h2>Privacy & controls</h2>
-        <p style="color:var(--muted)">You can mute the mic, review and delete recordings, and control Skill permissions in your Alexa account.</p>
+        <h2 data-i18n="privacyHeading">Privacy & controls</h2>
+        <p style="color:var(--muted)" data-i18n="privacyBody">You can mute the mic, review and delete recordings, and control Skill permissions in your Alexa account.</p>
       </section>
     </main>
 
@@ -288,6 +304,85 @@
         document.body.appendChild(banner);
       }
       showCookieBanner();
+
+      // Accessibility controls: contrast + text size + language
+      (function(){
+        const contrastToggle = document.getElementById('contrast-toggle');
+        const textInc = document.getElementById('text-inc');
+        const textDec = document.getElementById('text-dec');
+        const langSelect = document.getElementById('lang-select');
+
+        // initial state
+        const savedContrast = localStorage.getItem('highContrast') === 'true';
+        const savedScale = parseFloat(localStorage.getItem('textScale') || '1');
+        const savedLang = localStorage.getItem('lang') || 'en';
+
+        function applyContrast(on){
+          document.body.classList.toggle('high-contrast', on);
+          contrastToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+          localStorage.setItem('highContrast', on ? 'true' : 'false');
+        }
+
+        function applyTextScale(scale){
+          const base = 16;
+          document.documentElement.style.fontSize = (base * scale) + 'px';
+          localStorage.setItem('textScale', String(scale));
+        }
+
+        const i18n = {
+          en: {
+            trySaying: 'Try saying',
+            example1: '"Hey Alexa, play the vibe playlist 🎧"',
+            example2: '"Alexa, set the lights to chill ✨"',
+            example3: '"Alexa, set a 10-minute timer ⏱️"',
+            viewProducts: 'View products',
+            fact1: 'Alexa Skills are voice apps that extend capabilities.',
+            fact2: 'Wake-word detection runs locally; full processing happens in the cloud.',
+            fact3: 'Routines let you chain commands to a single phrase.',
+            fact4: 'Alexa integrates with many smart-home brands.',
+            fact5: 'Use the Alexa app to review and delete voice history.',
+            privacyHeading: 'Privacy & controls',
+            privacyBody: 'You can mute the mic, review and delete recordings, and control Skill permissions in your Alexa account.'
+          },
+          es: {
+            trySaying: 'Prueba decir',
+            example1: '"Hey Alexa, pon la lista de temas 🎧"',
+            example2: '"Alexa, pon las luces en modo chill ✨"',
+            example3: '"Alexa, pon un temporizador de 10 minutos ⏱️"',
+            viewProducts: 'Ver productos',
+            fact1: 'Las Skills de Alexa son aplicaciones de voz que amplían las capacidades.',
+            fact2: 'La detección de palabra de activación se ejecuta localmente; el procesamiento completo ocurre en la nube.',
+            fact3: 'Las Rutinas permiten encadenar comandos a una sola frase.',
+            fact4: 'Alexa se integra con muchas marcas de hogar inteligente.',
+            fact5: 'Usa la app de Alexa para revisar y eliminar el historial de voz.',
+            privacyHeading: 'Privacidad y controles',
+            privacyBody: 'Puedes silenciar el micrófono, revisar y eliminar grabaciones, y controlar los permisos de las Skills en tu cuenta Alexa.'
+          }
+        };
+
+        function applyLanguage(lang){
+          const dict = i18n[lang] || i18n.en;
+          document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if(dict[key]){
+              // preserve quotes for example buttons
+              el.textContent = dict[key];
+            }
+          });
+          langSelect.value = lang;
+          localStorage.setItem('lang', lang);
+        }
+
+        contrastToggle && contrastToggle.addEventListener('click', () => applyContrast(!document.body.classList.contains('high-contrast')));
+        textInc && textInc.addEventListener('click', () => { const s = Math.min(1.5, parseFloat(localStorage.getItem('textScale')||'1') + 0.1); applyTextScale(s); });
+        textDec && textDec.addEventListener('click', () => { const s = Math.max(0.8, parseFloat(localStorage.getItem('textScale')||'1') - 0.1); applyTextScale(s); });
+        langSelect && langSelect.addEventListener('change', (e) => applyLanguage(e.target.value));
+
+        // apply saved
+        applyContrast(savedContrast);
+        applyTextScale(savedScale);
+        applyLanguage(savedLang);
+      })();
 
       // --- Product scroller logic ---
       (function(){
