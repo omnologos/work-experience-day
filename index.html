@@ -4,9 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>What is Alexa — How it works</title>
+    <meta name="description" content="Learn what Alexa is, how it works, common uses, and privacy controls. A beginner-friendly overview." />
+    <meta property="og:title" content="What is Alexa — How it works" />
+    <meta property="og:description" content="Learn what Alexa is, how it works, common uses, and privacy controls." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23ffcc4d'/%3E%3Ctext x='50' y='66' font-family='Arial' font-size='60' text-anchor='middle' fill='%23232f3e'%3EA%3C/text%3E%3C/svg%3E" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"Alexa Info","url":"/","description":"Simple Alexa overview for beginners."}
+    </script>
     <style>
       :root {
         font-family: Arial, Helvetica, sans-serif;
+        --accent:#ffcc4d;
+        --muted:rgba(255,255,255,0.9);
       }
       body {
         margin: 0;
@@ -15,7 +25,11 @@
         place-items: center;
         background: linear-gradient(120deg, #232f3e, #e14f00);
         color: #fff;
+        -webkit-font-smoothing:antialiased;
       }
+
+      .skip-link{position:absolute;left:8px;top:8px;background:#000;border-radius:6px;padding:6px 8px;color:#fff;z-index:999;transform:translateY(-120%);transition:transform 180ms}
+      .skip-link:focus{transform:translateY(0)}
       .alexa-corner {
         position: fixed;
         top: 12px;
@@ -24,6 +38,9 @@
         height: auto;
         filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
       }
+      header{position:fixed;top:12px;left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;z-index:80}
+      nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px}
+      nav a[aria-current="page"]{background:rgba(255,255,255,0.08)}
       .card {
         text-align: left;
         background: rgba(0, 0, 0, 0.35);
@@ -50,13 +67,14 @@
         margin-top: 1rem;
         border: 0;
         border-radius: 10px;
-        padding: 0.7rem 1rem;
+        padding: 0.9rem 1rem;
         font-size: 1rem;
         font-weight: 700;
         color: #232f3e;
-        background: #ffcc4d;
+        background: var(--accent);
         cursor: pointer;
       }
+      button:focus{outline:3px solid rgba(255,204,77,0.25);outline-offset:3px}
       button:hover {
         filter: brightness(1.05);
       }
@@ -73,27 +91,36 @@
           top: 8px;
           right: 8px;
         }
+        header{left:8px;right:8px}
+        .card{padding:1.2rem}
+        nav a{padding:8px}
       }
     </style>
   </head>
-  <body>
-    <img
-      class="alexa-corner"
-      src="images/Alexa-Echo-Transparent-Image.png"
-      alt="Amazon Alexa Echo device"
-    />
-    <main class="card">
+    <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header aria-hidden="false">
+      <div style="display:flex;gap:12px;align-items:center">
+        <img src="images/Alexa-Echo-Transparent-Image.png" alt="Alexa device" class="alexa-corner" />
+      </div>
+      <nav aria-label="Primary">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="alexa-details.html">Details</a>
+        <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener">Developer</a>
+      </nav>
+    </header>
+
+    <main id="main-content" class="card" role="main">
       <h1>What is Alexa?</h1>
-      <p>Alexa is Amazon's cloud-based voice assistant. It listens for a wake word (for example "Alexa") and responds to spoken requests by answering questions, controlling smart devices, playing media, and running voice apps called Skills.</p>
+      <p>Alexa is a cloud-based voice assistant that responds to a wake word and performs tasks like answering questions, controlling smart devices, and playing media.</p>
 
       <h2>How Alexa works</h2>
       <ol>
-        <li><strong>Wake word detection:</strong> A small local model on the device listens for the wake word and wakes the device when it hears the trigger.</li>
-        <li><strong>Capture:</strong> After waking, the device records a short audio clip of your request.</li>
-        <li><strong>Transmit:</strong> The audio is securely sent to Amazon's cloud for processing.</li>
-        <li><strong>Natural Language Understanding (NLU):</strong> Cloud services convert speech to text, determine intent, and map the request to an action.</li>
-        <li><strong>Action & response:</strong> The cloud returns a response (spoken reply, music playback, or a command to control a smart device).</li>
-        <li><strong>Device executes:</strong> The device speaks the response or performs the requested action (e.g., turns on a light).</li>
+        <li><strong>Wake word:</strong> A local model listens for the wake word and wakes the device.</li>
+        <li><strong>Record:</strong> The device captures a short audio clip of your request.</li>
+        <li><strong>Cloud processing:</strong> Audio is sent to the cloud where ASR (speech-to-text) and NLU determine intent.</li>
+        <li><strong>Response:</strong> The cloud returns a reply or commands a connected device.</li>
+        <li><strong>Execution:</strong> The device speaks the response or performs the action.</li>
       </ol>
 
       <h2>Common uses</h2>
@@ -109,32 +136,84 @@
       <p>You can review and delete your voice recordings, mute the microphone on many devices, and control what Skills have access to. Alexa processes requests in the cloud to provide accurate responses; voice recordings and account data are subject to Amazon's privacy controls.</p>
 
       <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem;">
-        <button id="facts-toggle" type="button">Show 5 quick facts</button>
+        <button id="facts-toggle" type="button" aria-expanded="false" aria-controls="facts-list">Show 5 quick facts</button>
+        <button id="details-button" type="button" aria-label="Learn more about Alexa">Learn more →</button>
         <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;">Alexa Developer</a>
       </div>
 
-      <ul id="facts-list">
+      <ul id="facts-list" tabindex="0">
         <li>Alexa Skills are voice apps that extend Alexa's abilities.</li>
         <li>Wake word detection runs locally; other processing happens in the cloud.</li>
         <li>Many manufacturers build Alexa into smart speakers, watches, and appliances.</li>
         <li>Routines let you chain multiple actions to a single command.</li>
         <li>You can use the Alexa app to customize settings and linked services.</li>
       </ul>
-
       <p id="build-time"></p>
+
+      <section id="privacy" aria-label="Privacy" style="margin-top:1rem">
+        <h2>Privacy & controls</h2>
+        <p>You can review and delete voice recordings, mute the microphone, and control what Skills can access. Alexa processes requests in the cloud to provide accurate responses; your account settings determine data retention.</p>
+      </section>
     </main>
+
+    <footer style="margin-top:18px;text-align:center;color:rgba(255,255,255,0.85);font-size:0.9rem">
+      <div>Image: <a href="images/" style="color:inherit;">Alexa device</a>. <span class="muted">Made for demo.</span></div>
+    </footer>
     <script>
+      // Build time stamp
       const now = new Date();
-      document.getElementById("build-time").textContent =
-        `Loaded at ${now.toLocaleString()}`;
+      document.getElementById("build-time").textContent = `Loaded at ${now.toLocaleString()}`;
+
+      // Facts toggle (accessible)
       const factsToggle = document.getElementById("facts-toggle");
       const factsList = document.getElementById("facts-list");
       factsToggle.addEventListener("click", () => {
-        factsList.classList.toggle("show");
-        factsToggle.textContent = factsList.classList.contains("show")
-          ? "Hide fun facts"
-          : "Show 5 fun facts about Alexa";
+        const open = factsList.classList.toggle("show");
+        factsToggle.textContent = open ? "Hide quick facts" : "Show 5 quick facts";
+        factsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
+
+      // Interactive navigation to details page with a small fade
+      const detailsBtn = document.getElementById('details-button');
+      detailsBtn.addEventListener('click', () => {
+        const card = document.querySelector('.card');
+        card.style.transition = 'opacity 220ms ease, transform 220ms ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(8px)';
+        setTimeout(() => { window.location.href = 'alexa-details.html'; }, 240);
+      });
+
+      // Simple analytics opt-in banner
+      function showCookieBanner(){
+        if(localStorage.getItem('analyticsConsent') !== null) return;
+        const banner = document.createElement('div');
+        banner.id = 'cookie-banner';
+        banner.style.position = 'fixed';
+        banner.style.bottom = '12px';
+        banner.style.left = '12px';
+        banner.style.right = '12px';
+        banner.style.background = 'rgba(0,0,0,0.6)';
+        banner.style.padding = '12px';
+        banner.style.borderRadius = '10px';
+        banner.style.display = 'flex';
+        banner.style.justifyContent = 'space-between';
+        banner.style.alignItems = 'center';
+        banner.style.gap = '12px';
+        banner.innerHTML = '<div style="flex:1;color:var(--muted)">We use optional analytics to improve this demo. Accept to enable anonymous analytics.</div>';
+        const actions = document.createElement('div');
+        const accept = document.createElement('button');
+        accept.textContent = 'Accept';
+        accept.style.marginRight = '8px';
+        accept.onclick = () => { localStorage.setItem('analyticsConsent','yes'); document.body.removeChild(banner); };
+        const decline = document.createElement('button');
+        decline.textContent = 'Decline';
+        decline.onclick = () => { localStorage.setItem('analyticsConsent','no'); document.body.removeChild(banner); };
+        actions.appendChild(accept);
+        actions.appendChild(decline);
+        banner.appendChild(actions);
+        document.body.appendChild(banner);
+      }
+      showCookieBanner();
     </script>
   </body>
 </html>
