@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Alexa Marketing Playground</title>
+    <title>What is Alexa — How it works</title>
     <style>
       :root {
         font-family: Arial, Helvetica, sans-serif;
@@ -25,26 +25,26 @@
         filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
       }
       .card {
-        text-align: center;
+        text-align: left;
         background: rgba(0, 0, 0, 0.35);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 16px;
         padding: 2rem;
-        width: min(90vw, 700px);
+        width: min(92vw, 820px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
       }
       h1 {
         margin-top: 0;
-        font-size: clamp(1.8rem, 4vw, 3rem);
+        font-size: clamp(1.6rem, 4vw, 2.6rem);
       }
       p {
-        margin-bottom: 0;
-        opacity: 0.9;
+        margin-bottom: 0.6rem;
+        opacity: 0.95;
       }
       ul {
         text-align: left;
-        margin: 1rem auto 0;
-        width: fit-content;
+        margin: 0.6rem 0 0 0;
+        padding-left: 1.15rem;
       }
       button {
         margin-top: 1rem;
@@ -83,21 +83,44 @@
       alt="Amazon Alexa Echo device"
     />
     <main class="card">
-      <h1>Alexa Marketing Playground, hello from Maurizio M</h1>
-      <p>Build a simple marketing page for Alexa with your team.</p>
+      <h1>What is Alexa?</h1>
+      <p>Alexa is Amazon's cloud-based voice assistant. It listens for a wake word (for example "Alexa") and responds to spoken requests by answering questions, controlling smart devices, playing media, and running voice apps called Skills.</p>
+
+      <h2>How Alexa works</h2>
+      <ol>
+        <li><strong>Wake word detection:</strong> A small local model on the device listens for the wake word and wakes the device when it hears the trigger.</li>
+        <li><strong>Capture:</strong> After waking, the device records a short audio clip of your request.</li>
+        <li><strong>Transmit:</strong> The audio is securely sent to Amazon's cloud for processing.</li>
+        <li><strong>Natural Language Understanding (NLU):</strong> Cloud services convert speech to text, determine intent, and map the request to an action.</li>
+        <li><strong>Action & response:</strong> The cloud returns a response (spoken reply, music playback, or a command to control a smart device).</li>
+        <li><strong>Device executes:</strong> The device speaks the response or performs the requested action (e.g., turns on a light).</li>
+      </ol>
+
+      <h2>Common uses</h2>
       <ul>
-        <li>Change colors, fonts, and layout</li>
-        <li>Add a headline and call-to-action</li>
-        <li>Make it fun and memorable</li>
+        <li>Hands-free information (weather, news, timers, answers)</li>
+        <li>Smart home control (lights, locks, thermostats)</li>
+        <li>Music, podcasts, and media playback</li>
+        <li>Alarms, reminders, and calendar management</li>
+        <li>Third-party Skills for shopping, games, and utilities</li>
       </ul>
-      <button id="facts-toggle" type="button">Show 5 fun facts about Alexa</button>
+
+      <h2>Privacy & controls</h2>
+      <p>You can review and delete your voice recordings, mute the microphone on many devices, and control what Skills have access to. Alexa processes requests in the cloud to provide accurate responses; voice recordings and account data are subject to Amazon's privacy controls.</p>
+
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem;">
+        <button id="facts-toggle" type="button">Show 5 quick facts</button>
+        <a href="https://developer.amazon.com/en-US/alexa" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;padding:0.6rem 0.9rem;border-radius:10px;background:#2b9cff;color:white;font-weight:700;">Alexa Developer</a>
+      </div>
+
       <ul id="facts-list">
-        <li>Alexa can set timers, alarms, and reminders with simple voice commands.</li>
-        <li>It can control many smart-home devices like lights, plugs, and thermostats.</li>
-        <li>You can create custom voice commands with Alexa Routines.</li>
-        <li>Alexa can play music, podcasts, audiobooks, and radio stations.</li>
-        <li>Developers can build voice apps for Alexa called Skills.</li>
+        <li>Alexa Skills are voice apps that extend Alexa's abilities.</li>
+        <li>Wake word detection runs locally; other processing happens in the cloud.</li>
+        <li>Many manufacturers build Alexa into smart speakers, watches, and appliances.</li>
+        <li>Routines let you chain multiple actions to a single command.</li>
+        <li>You can use the Alexa app to customize settings and linked services.</li>
       </ul>
+
       <p id="build-time"></p>
     </main>
     <script>
