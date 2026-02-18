@@ -95,6 +95,21 @@
           const active = products[index];
           productName.textContent = active.name;
           productPrice.innerHTML = `<span style="color:var(--accent);font-weight:800">${active.price}</span> <span style="text-decoration:line-through;margin-left:10px;opacity:0.7">${active.oldPrice}</span>`;
+
+          // scale/opacity per card based on distance to center
+          const cards = Array.from(track.children);
+          const centerX = window.innerWidth / 2;
+          cards.forEach(card => {
+            const r = card.getBoundingClientRect();
+            const cardCenter = r.left + r.width/2;
+            const dist = Math.abs(centerX - cardCenter);
+            const maxDist = window.innerWidth * 0.6;
+            const t = Math.min(dist / maxDist, 1);
+            const scale = 1 + (1 - t) * 0.14; // scale up near center
+            const opa = 0.5 + (1 - t) * 0.5;
+            card.style.transform = `scale(${scale})`;
+            card.style.opacity = opa;
+          });
         }
 
         window.addEventListener('scroll', onScroll, { passive:true });

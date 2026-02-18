@@ -114,6 +114,18 @@
         .pill{display:inline-block;background:linear-gradient(90deg,var(--accent-2),#a0ffdf);color:#00221a;padding:8px 12px;border-radius:999px;font-weight:600;margin-right:8px;margin-top:8px}
         .examples button{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted);padding:8px 10px;border-radius:999px;margin:6px;cursor:pointer}
         .neon{box-shadow:0 6px 18px rgba(125,227,168,0.18)}
+        /* Animated background blobs */
+        .float-ball{position:absolute;border-radius:999px;opacity:0.12;filter:blur(20px);pointer-events:none;animation:float 8s ease-in-out infinite}
+        .float-ball.one{width:220px;height:220px;background:linear-gradient(90deg,var(--accent-2),#a0ffdf);left:6%;top:6%}
+        .float-ball.two{width:320px;height:320px;background:linear-gradient(90deg,#2b9cff,#6bd3ff);right:8%;bottom:6%}
+
+        @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-18px)}100%{transform:translateY(0)}}
+
+        /* hero/cta animations */
+        .fade-up{opacity:0;transform:translateY(8px);transition:opacity 420ms ease, transform 420ms ease}
+        .fade-up.in{opacity:1;transform:translateY(0)}
+        .cta-pulse{animation:pulse 2200ms ease-in-out infinite}
+        @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
         /* High contrast mode */
         body.high-contrast{background:#000;color:#fff}
         body.high-contrast .card{background:#000;border-color:#fff;color:#fff}
@@ -146,14 +158,17 @@
     </header>
 
     <main id="main-content" class="card" role="main">
-      <div class="hero">
+      <div style="position:relative">
+        <div class="float-ball one" aria-hidden="true"></div>
+        <div class="float-ball two" aria-hidden="true"></div>
+        <div class="hero">
         <div>
-          <span class="badge">INSPIRATION</span>
-          <h1>Alexa — what it is and how it works</h1>
-          <p style="margin-top:8px;color:var(--muted)">A quick, friendly primer — with examples you can try right away.</p>
+          <span class="badge fade-up" id="badge">INSPIRATION</span>
+          <h1 class="fade-up" id="hero-title">Alexa — what it is and how it works</h1>
+          <p class="fade-up" style="margin-top:8px;color:var(--muted)" id="hero-sub">A quick, friendly primer — with examples you can try right away.</p>
 
           <div style="margin-top:1rem">
-            <button id="details-button" class="neon" aria-label="Learn more about Alexa">Learn more →</button>
+            <button id="details-button" class="neon cta-pulse" aria-label="Learn more about Alexa">Learn more →</button>
             <a href="alexa-details.html" style="margin-left:10px;text-decoration:none;padding:0.9rem 1rem;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:700">Read details</a>
           </div>
 
@@ -270,6 +285,14 @@
           card.style.opacity = '0';
           card.style.transform = 'translateY(8px)';
           setTimeout(() => { window.location.href = 'alexa-details.html'; }, 240);
+        });
+        // subtle entrance animations
+        window.requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById('badge').classList.add('in');
+            document.getElementById('hero-title').classList.add('in');
+            document.getElementById('hero-sub').classList.add('in');
+          }, 120);
         });
       }
 
