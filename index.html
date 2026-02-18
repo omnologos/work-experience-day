@@ -203,6 +203,32 @@
     <footer style="margin-top:18px;text-align:center;color:rgba(255,255,255,0.85);font-size:0.9rem">
       <div>Image: Alexa device in <a href="images/" style="color:inherit;">/images</a>. Demo only. <span style="margin-left:8px">💬 <a href="#privacy" style="color:inherit;">Privacy</a></span></div>
     </footer>
+    <!-- Product scroller: pinned horizontal gallery that animates with scroll -->
+    <section id="products" aria-label="Alexa products" style="width:100%;max-width:1100px;margin:2.2rem auto;">
+      <div style="position:relative">
+        <h2 style="margin:0 0 12px 0">New & classic Alexa products</h2>
+        <p style="margin:0 0 18px;color:var(--muted)">Scroll to explore models, see old vs new prices and images.</p>
+
+        <div id="scroller-wrap" style="height:48vh;position:relative;overflow:hidden">
+          <div id="scroller" style="position:sticky;top:96px;display:flex;align-items:center;height:100%;">
+            <div id="track" style="display:flex;gap:24px;will-change:transform;padding:32px">
+              <!-- product cards populated by JS for flexibility -->
+            </div>
+          </div>
+        </div>
+
+        <div id="product-overlay" aria-hidden="false" style="position:relative;margin-top:12px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div id="product-info" style="flex:1">
+            <div id="product-name" style="font-weight:700;font-size:1.05rem"></div>
+            <div id="product-price" style="margin-top:6px;font-size:1.1rem"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="buy-now" style="background:var(--accent);border-radius:10px;padding:10px 14px;border:0;font-weight:700;cursor:pointer">Buy</button>
+            <button id="compare" style="background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted);">Compare</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <script>
       // Build time stamp
@@ -261,6 +287,89 @@
         document.body.appendChild(banner);
       }
       showCookieBanner();
+
+      // --- Product scroller logic ---
+      (function(){
+        const products = [
+          { id: 'echo_new', name: 'Echo (2025)', price: '$129', oldPrice: '$159', img: 'images/echo_new.svg' },
+          { id: 'echo_dot', name: 'Echo Dot', price: '$49', oldPrice: '$59', img: 'images/echo_dot.svg' },
+          { id: 'echo_old', name: 'Echo (2018)', price: '$79', oldPrice: '$99', img: 'images/echo_old.svg' }
+        ];
+
+        const track = document.getElementById('track');
+        const scrollerWrap = document.getElementById('scroller-wrap');
+        const productName = document.getElementById('product-name');
+        const productPrice = document.getElementById('product-price');
+
+        // create cards
+        products.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.style.minWidth = '320px';
+          card.style.maxWidth = '360px';
+          card.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06))';
+          card.style.borderRadius = '14px';
+          card.style.padding = '14px';
+          card.style.boxShadow = '0 10px 30px rgba(2,6,23,0.45)';
+          card.style.display = 'flex';
+          card.style.gap = '12px';
+          card.style.alignItems = 'center';
+
+          const img = document.createElement('img');
+          img.src = p.img;
+          img.alt = p.name;
+          img.style.width = '160px';
+          img.style.height = 'auto';
+          img.style.borderRadius = '10px';
+
+          const meta = document.createElement('div');
+          meta.innerHTML = `<div style="font-weight:700">${p.name}</div><div style="margin-top:6px;color:rgba(255,255,255,0.9)"><span style=\"font-weight:700;color:var(--accent)\">${p.price}</span> <span style=\"text-decoration:line-through;margin-left:8px;opacity:0.7\">${p.oldPrice}</span></div>`;
+
+          card.appendChild(img);
+          card.appendChild(meta);
+          track.appendChild(card);
+        });
+
+        // measure track width to compute travel
+        function update() {
+          const trackWidth = track.scrollWidth;
+          const wrapHeight = scrollerWrap.offsetHeight;
+          // set scroller-wrap container height so section has scroll length equal to trackWidth
+          // larger track -> longer scroll needed; scale factor to tune feel
+          const extra = Math.max(800, trackWidth * 0.9);
+          scrollerWrap.style.height = wrapHeight + 'px';
+          // set document spacer by adding padding-bottom on the section parent
+          const section = document.getElementById('products');
+          section.style.paddingBottom = (extra/2) + 'px';
+        }
+        update();
+
+        // on scroll map progress to translateX
+        function onScroll(){
+          const section = document.getElementById('products');
+          const rect = section.getBoundingClientRect();
+          const start = window.innerHeight * 0.15;
+          const end = -(rect.height - window.innerHeight * 0.85);
+          // compute normalized progress (0..1)
+          const total = rect.height + window.innerHeight - start - (window.innerHeight * 0.15);
+          let progress = (window.innerHeight - rect.top - start) / (rect.height - start + window.innerHeight * 0.15);
+          progress = Math.min(Math.max(progress, 0), 1);
+
+          const maxTranslate = Math.max(0, track.scrollWidth - (window.innerWidth * 0.6));
+          const x = -maxTranslate * progress;
+          track.style.transform = `translateX(${x}px)`;
+
+          // determine active index
+          const index = Math.round(progress * (products.length - 1));
+          const active = products[index];
+          productName.textContent = active.name;
+          productPrice.innerHTML = `<span style="color:var(--accent);font-weight:800">${active.price}</span> <span style="text-decoration:line-through;margin-left:10px;opacity:0.7">${active.oldPrice}</span>`;
+        }
+
+        window.addEventListener('scroll', onScroll, { passive:true });
+        window.addEventListener('resize', () => { update(); onScroll(); });
+        onScroll();
+      })();
     </script>
   </body>
 </html>
