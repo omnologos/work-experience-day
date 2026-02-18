@@ -131,6 +131,12 @@
         body.high-contrast .card{background:#000;border-color:#fff;color:#fff}
         body.high-contrast a{color:#fff}
         body.high-contrast button{border-color:#fff}
+        /* Product name-card styles */
+        .product-card{min-width:320px;max-width:380px;border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06));box-shadow:0 10px 30px rgba(2,6,23,0.45)}
+        .product-card .card-title{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+        .product-card .card-sub{color:rgba(255,255,255,0.9);margin-bottom:10px}
+        .product-card .card-price{font-weight:800;color:var(--accent);font-size:1.05rem}
+        .product-card .card-old{margin-left:10px;text-decoration:line-through;opacity:0.7;font-weight:600}
     </style>
   </head>
     <body>
@@ -410,9 +416,9 @@
       // --- Product scroller logic ---
       (function(){
         const products = [
-          { id: 'echo_new', name: 'Echo (2025)', price: '$129', oldPrice: '$159', img: 'images/echo_new.jpg' },
-          { id: 'echo_dot', name: 'Echo Dot', price: '$49', oldPrice: '$59', img: 'images/echo_dot.jpg' },
-          { id: 'echo_old', name: 'Echo (2018)', price: '$79', oldPrice: '$99', img: 'images/echo_old.jpg' }
+          { id: 'echo_new', name: 'Echo (2025)', subtitle: 'Compact smart speaker', price: '$129', oldPrice: '$159', img: 'images/echo_new.jpg' },
+          { id: 'echo_dot', name: 'Echo Dot', subtitle: 'Small & mighty', price: '$49', oldPrice: '$59', img: 'images/echo_dot.jpg' },
+          { id: 'echo_old', name: 'Echo (2018)', subtitle: 'Original Echo', price: '$79', oldPrice: '$99', img: 'images/echo_old.jpg' }
         ];
 
         const track = document.getElementById('track');
@@ -420,32 +426,34 @@
         const productName = document.getElementById('product-name');
         const productPrice = document.getElementById('product-price');
 
-        // create cards
+        // create typographic name-cards (no product images)
         products.forEach(p => {
           const card = document.createElement('div');
           card.className = 'product-card';
-          card.style.minWidth = '320px';
-          card.style.maxWidth = '360px';
-          card.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06))';
-          card.style.borderRadius = '14px';
-          card.style.padding = '14px';
-          card.style.boxShadow = '0 10px 30px rgba(2,6,23,0.45)';
-          card.style.display = 'flex';
-          card.style.gap = '12px';
-          card.style.alignItems = 'center';
 
-          const img = document.createElement('img');
-          img.src = p.img;
-          img.alt = p.name;
-          img.style.width = '160px';
-          img.style.height = 'auto';
-          img.style.borderRadius = '10px';
+          const title = document.createElement('div');
+          title.className = 'card-title';
+          title.textContent = p.name;
 
-          const meta = document.createElement('div');
-          meta.innerHTML = `<div style="font-weight:700">${p.name}</div><div style="margin-top:6px;color:rgba(255,255,255,0.9)"><span style=\"font-weight:700;color:var(--accent)\">${p.price}</span> <span style=\"text-decoration:line-through;margin-left:8px;opacity:0.7\">${p.oldPrice}</span></div>`;
+          const sub = document.createElement('div');
+          sub.className = 'card-sub';
+          // small descriptor — keep concise and generic
+          sub.textContent = p.subtitle || 'Smart speaker — voice assistant';
 
-          card.appendChild(img);
-          card.appendChild(meta);
+          const priceRow = document.createElement('div');
+          const price = document.createElement('span');
+          price.className = 'card-price';
+          price.textContent = p.price;
+          const old = document.createElement('span');
+          old.className = 'card-old';
+          old.textContent = p.oldPrice;
+          priceRow.appendChild(price);
+          priceRow.appendChild(old);
+
+          card.appendChild(title);
+          card.appendChild(sub);
+          card.appendChild(priceRow);
+
           track.appendChild(card);
         });
 
